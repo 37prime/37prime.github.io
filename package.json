@@ -1,0 +1,19 @@
+{
+  "name": "37prime-webpage",
+  "version": "1.0.0",
+  "license": "MIT",
+  "homepage": "https://37prime.github.io/",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "sirv dist --no-clear",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.31",
+    "gh-pages": "^3.2.3",
+    "svelte": "^3.44.2",
+    "vite": "^2.7.1"
+  }
+}
