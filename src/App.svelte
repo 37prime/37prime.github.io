@@ -85,7 +85,7 @@
 
 	const infiniteApproval = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
-	window.Wallet = new WalletClass();
+	let Wallet = new WalletClass();
 
 	Contracts.faucet;
 	Contracts.staking;
@@ -300,99 +300,108 @@
 
 	<p>37 contract: {contractsData.token.address}</p>
 
-	{#if chainId != 137}
+	{#if ! Wallet.provider}
+
+		<br />
+
+		<p>Connect your wallet to the Polygon Network to access the App.</p>
+
+	{:else if chainId != 137}
 		<h2 class="wrongChain">Please select the Polygon Network in your wallet!</h2>
 		<button on:click={btn_changeToPolygon}>Change to Polygon</button>
+
 	{:else}
 	
-	
-
-	<div class="appcenter">
-		<div class="divboxl1">
-			
-			{#if isFaucetAvailable}
-				<p>You are eligible to receive 0.00037 tokens from the faucet!</p>
-				<button on:click={btn_requestTokens}>Request Tokens!</button>
-			{:else}
-				<p>Your wallet is not eligible to receive tokens from the faucet at the moment.</p>
-			{/if}
-			<p>Faucet contract: {contractsData.faucet.address}</p>
-		</div>
-
-		
-		<div class="divboxl1">
-			<div class="poolInfo">
-				<p><strong>Staking Pool</strong></p>
-				<p>Total rewards available: {tokenValToString(rewardTokenBalance)}</p>
-				<p>Total Staked: {tokenValToString(tokenTotalStaked)}</p>
-				<p>Pool locktime: {secondsToDhms(lockTimePeriod)}</p>
-				<p>Pool ends on: {blockchainTimeToHuman(stakeRewardEndTime)}</p>
-				<p>{(stakeRewardFactor/31556952*100).toFixed(1)}% APY</p>
-			</div>
-			
-			{#if userTokenBalance + earnedRewardTokens + userStakeAmount == 0}
-
-				<p>You need to own 37prime tokens to stake. Get some in the faucet!</p>
-			
-			{:else}
-			
-				<p>Your staked amount: <span class="stakedvaluetext">{tokenValToString(userStakeAmount)}</span></p>
-
-				{#if userStakeAmount > 0}
-					<p>Datetime you staked: {blockchainTimeToHuman(userStakedAtTime)}</p>
-					<p>Your stake {Date.now() > (userUnlockTime * 1000) ? "was" : "is currently"} locked until: {blockchainTimeToHuman(userUnlockTime)}</p>
-				{/if}
+		<div class="appcenter">
+			<div class="divboxl1">
 				
-				{#if userAllowance == 0}
-					<button on:click={btn_approveErc20}>Approve</button>
-				{:else if userAllowance < 37*10**18}
-					<button on:click={btn_approveErc20}>Approve more</button>
+				{#if isFaucetAvailable}
+					<p>You are eligible to receive 0.00037 tokens from the faucet!</p>
+					<button on:click={btn_requestTokens}>Request Tokens!</button>
 				{:else}
-					<button disabled>Approved</button>
+					<p>Your wallet is not eligible to receive tokens from the faucet at the moment.</p>
 				{/if}
+				<p>Faucet contract: {contractsData.faucet.address}</p>
+			</div>
 
-				<p>Your wallet balance: <span class="stakedvaluetext">{tokenValToString(userTokenBalance)}</span></p>
-				<!-- <p>Approved amount: {userAllowance}</p> -->
-				<p>How much to stake?</p>
-				<input type="number" placeholder="0" bind:value={amountToStake} min="0" max={userTokenBalance} on:blur={maxValueInput} style="text-align: right; width: 200px;"/>
-				<button on:click={()=>{amountToStake = tokenValToString(userTokenBalance)}}>Max</button>
+			
+			<div class="divboxl1">
+				<div class="poolInfo">
+					<p><strong>Staking Pool</strong></p>
+					<p>Total rewards available: {tokenValToString(rewardTokenBalance)}</p>
+					<p>Total Staked: {tokenValToString(tokenTotalStaked)}</p>
+					<p>Pool locktime: {secondsToDhms(lockTimePeriod)}</p>
+					<p>Pool ends on: {blockchainTimeToHuman(stakeRewardEndTime)}</p>
+					<p>{(stakeRewardFactor/31556952*100).toFixed(1)}% APY</p>
+				</div>
+				
+				{#if userTokenBalance + earnedRewardTokens + userStakeAmount == 0}
 
-				{#if amountToStake < userAllowance}
-					<button on:click={btn_stake}>Stake</button>
+					<p>You need to own 37prime tokens to stake. Get some in the faucet!</p>
+				
 				{:else}
-					<button disabled>Stake</button>
-				{/if}
+				
+					<p>Your staked amount: <span class="stakedvaluetext">{tokenValToString(userStakeAmount)}</span></p>
 
-				{#if earnedRewardTokens > 0}
-
-					<p>Claimable Reward: {tokenValToString(earnedRewardTokens)} <button on:click={btn_claim}>Claim</button></p>
-
-				{/if}
-
-				{#if userStakeAmount > 0}
-
-					{#if Date.now() > (userUnlockTime * 1000)}
-						<p>Withdraw Stake</p>
-
-						<input type="number" placeholder="0" bind:value={amountToWithdraw} min="0" max={tokenValToString(userStakeAmount)} on:blur={maxValueInput} style="text-align: right; width: 200px;"/>
-						<button on:click={()=>{amountToWithdraw = tokenValToString(userStakeAmount)}}>Max</button>
-						<button on:click={btn_withdraw}>Withdraw</button>
-					{:else}
-						<p>Your stake is currently locked until: {blockchainTimeToHuman(userUnlockTime)}</p>
-						<br />
+					{#if userStakeAmount > 0}
+						<p>Datetime you staked: {blockchainTimeToHuman(userStakedAtTime)}</p>
+						<p>Your stake {Date.now() > (userUnlockTime * 1000) ? "was" : "is currently"} locked until: {blockchainTimeToHuman(userUnlockTime)}</p>
 					{/if}
+					
+					{#if userAllowance == 0}
+						<button on:click={btn_approveErc20}>Approve</button>
+					{:else if userAllowance < 37*10**18}
+						<button on:click={btn_approveErc20}>Approve more</button>
+					{:else}
+						<button disabled>Approved</button>
+					{/if}
+
+					<p>Your wallet balance: <span class="stakedvaluetext">{tokenValToString(userTokenBalance)}</span></p>
+					<!-- <p>Approved amount: {userAllowance}</p> -->
+					<p>How much to stake?</p>
+					<input type="number" placeholder="0" bind:value={amountToStake} min="0" max={userTokenBalance} on:blur={maxValueInput} style="text-align: right; width: 200px;"/>
+					<button on:click={()=>{amountToStake = tokenValToString(userTokenBalance)}}>Max</button>
+
+					{#if amountToStake < userAllowance}
+						<button on:click={btn_stake}>Stake</button>
+					{:else}
+						<button disabled>Stake</button>
+					{/if}
+
+					{#if earnedRewardTokens > 0}
+
+						<p>Claimable Reward: {tokenValToString(earnedRewardTokens)} <button on:click={btn_claim}>Claim</button></p>
+
+					{/if}
+
+					{#if userStakeAmount > 0}
+
+						{#if Date.now() > (userUnlockTime * 1000)}
+							<p>Withdraw Stake</p>
+
+							<input type="number" placeholder="0" bind:value={amountToWithdraw} min="0" max={tokenValToString(userStakeAmount)} on:blur={maxValueInput} style="text-align: right; width: 200px;"/>
+							<button on:click={()=>{amountToWithdraw = tokenValToString(userStakeAmount)}}>Max</button>
+							<button on:click={btn_withdraw}>Withdraw</button>
+						{:else}
+							<p>Your stake is currently locked until: {blockchainTimeToHuman(userUnlockTime)}</p>
+							<br />
+						{/if}
+					{/if}
+
+					<p>Token claim and Token Withdraw needs to be done separately</p>
+
 				{/if}
 
-				<p>Token claim and Token Withdraw needs to be done separately</p>
+				<p>Staking contract: {contractsData.staking.address}</p>
+			</div>
 
-			{/if}
-
-			<p>Staking contract: {contractsData.staking.address}</p>
+			
 		</div>
-
-		<p>Done with ❤️ using <a href="https://svelte.dev/">Svelte</a></p>
-	</div>
 	{/if}
+
+	<br />
+
+	<p>Made with ❤️ using <a href="https://svelte.dev/">Svelte</a></p>
 </main>
 
 
