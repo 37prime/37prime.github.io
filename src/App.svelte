@@ -401,7 +401,7 @@
 
 	<br />
 
-	<p>Made with ❤️ using <a href="https://svelte.dev/">Svelte</a></p>
+	<p>Made with ❤️ using <a href="https://svelte.dev/" target="_blank">Svelte</a></p>
 </main>
 
 
