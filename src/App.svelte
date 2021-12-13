@@ -87,11 +87,9 @@
 
 	window.Wallet = new WalletClass();
 
-	// console.log(contractsData.faucet.interface)
-	// Contracts.faucet = new Wallet.web3.eth.Contract(contractsData.faucet.interface)
-	Contracts.faucet = new Wallet.web3.eth.Contract(contractsData.faucet.interface ,contractsData.faucet.address)
-	Contracts.staking = new Wallet.web3.eth.Contract(contractsData.staking.interface ,contractsData.staking.address)
-	Contracts.token = new Wallet.web3.eth.Contract(contractsData.token.interface ,contractsData.token.address)
+	Contracts.faucet;
+	Contracts.staking;
+	Contracts.token;
 
 	Wallet.changeButton = (data) => {
         if(data == 'disconnected'){
@@ -105,6 +103,10 @@
 		chainId = _chainId
 
 		if (_chainId != 137) return;
+
+		Contracts.faucet = new Wallet.web3.eth.Contract(contractsData.faucet.interface ,contractsData.faucet.address)
+		Contracts.staking = new Wallet.web3.eth.Contract(contractsData.staking.interface ,contractsData.staking.address)
+		Contracts.token = new Wallet.web3.eth.Contract(contractsData.token.interface ,contractsData.token.address)
 
 		Contracts.token.methods.allowance(userAddress, contractsData.staking.address).call().then(
 		(r)=> {
