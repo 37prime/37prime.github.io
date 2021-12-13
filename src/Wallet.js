@@ -32,7 +32,10 @@ class WalletClass {
       walletconnect: {
         package: this.WalletConnectProvider,
         options: {
-          infuraId: "a1d145ed2a82409a8a4371b4861f89cf",
+          rpc: {
+            137: "https://rpc-mainnet.maticvigil.com/",
+          },
+          network: "matic",
         }
       }
     };
@@ -61,7 +64,7 @@ class WalletClass {
     this.web3.eth.getAccounts().then((accounts) => {
       this.selectedAccount = accounts[0];
       this.changeButton(obscureAddress(this.selectedAccount));
-      if(this.onConnectCallBack){this.onConnectCallBack(this.selectedAddress, this.chainId);}
+      if(this.onConnectCallBack){this.onConnectCallBack(this.selectedAccount, this.chainId);}
     });
   }
 
