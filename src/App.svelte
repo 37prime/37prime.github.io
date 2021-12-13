@@ -6,6 +6,8 @@
 
 	import contractsData from './contracts';
 
+	import logo from "./37.svg";
+
 
 	function secondsToDhms(seconds) {
 		seconds = Number(seconds);
@@ -289,7 +291,7 @@
 		</div>
 	</div>
 
-	<img src="37.svg" alt="37" class="img37" />
+	<img src={logo} alt="37" class="img37" />
 
 	<p>This is a joke and a testing tool. This is not an investment!</p>
 	<p>You can get free 37 tokens from the faucet and stake them if you want.</p>
