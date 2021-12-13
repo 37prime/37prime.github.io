@@ -61,7 +61,7 @@ class WalletClass {
     this.web3.eth.getAccounts().then((accounts) => {
       this.selectedAccount = accounts[0];
       this.changeButton(obscureAddress(this.selectedAccount));
-      if(this.onConnectCallBack){this.onConnectCallBack(ethereum.selectedAddress, this.chainId);}
+      if(this.onConnectCallBack){this.onConnectCallBack(this.selectedAddress, this.chainId);}
     });
   }
 

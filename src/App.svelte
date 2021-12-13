@@ -261,7 +261,7 @@
 	
 	const btn_changeToPolygon = async () => {
 		try {
-          await web3.currentProvider.request({
+          await Wallet.web3.currentProvider.request({
             method: "wallet_switchEthereumChain",
             params: [{ chainId: "0x89" }]
           });
