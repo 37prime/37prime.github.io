@@ -162,7 +162,7 @@ input[type=number] {
 
 
 
-/* Loading - Credits: https://loading.io */
+/* Loading animation - Credits: https://loading.io */
 
 .lds-ring {
 	display: inline-block;
@@ -201,4 +201,4 @@ input[type=number] {
 	}
 }
 
-/* End Loading */
+/* End Loading animation */
