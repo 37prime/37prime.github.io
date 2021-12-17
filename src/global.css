@@ -80,7 +80,6 @@ button:focus {
 main {
 	text-align: center;
 	padding: 1em;
-	max-width: 240px;
 	margin: 0 auto;
 }
 
@@ -203,10 +202,3 @@ input[type=number] {
 }
 
 /* End Loading */
-
-
-@media (min-width: 640px) {
-	main {
-		max-width: none;
-	}
-}
